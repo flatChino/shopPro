@@ -6,6 +6,10 @@ import com.example.shoppro.entity.Member;
 import com.example.shoppro.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //에러가 발생하였다면 변경된 데이터 로직을 수행하기
 //이전 상태로 롤백 시켜줍니다.
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
     
     private  final MemberRepository memberRepository;
     //빈 주입하는 방법으로@Autowired 어노테이션을 사용하거나 필드주입
@@ -24,12 +28,59 @@ public class MemberService {
     //빈이 생성자 1개이고 생성자의 파라미터 타입이 빈등록이 가능하다면
     //어노테이션 없이 의존성 주입이  가능
 
+
+    //로그인
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        Member member=
+        memberRepository.findByEmail(email);
+
+        if(member==null){
+            throw  new UsernameNotFoundException(email);
+        }
+
+
+        return User.builder()
+                .username(member.getEmail()) //세션에 저장됨
+                .password(member.getPassword())//내 로그인시 입력한 비밀번호와 비교할 값
+                .roles(member.getRole().name())
+                .build();
+    }
+
+
     //회원가입
     public Member SaveMember(MemberDTO memberDTO){
-        return  null;
-    };
+        //회원가입시 회원 가입여부
 
-    //회원가입시 회원 가입여부
+
+        //컨트롤러에서 받은 MemberDTO
+
+        Member member= memberDTO.DTOEntity(memberDTO);
+        vlidateDuplicateMember(member.getEmail());
+
+        member=
+        memberRepository.save(member);
+
+        return  member;
+    }
+
+    //회원가입시 회원 가입여부 확인하는 메소드
+    private  void vlidateDuplicateMember(String email){
+
+        Member member=
+        memberRepository.findByEmail(email);
+
+        //member가 null라는건 db에 회원가입이 되어있지 않은 email이니 회원가입이 가능하고
+        //null이 아니라는건 db에 회원이 가입되어있으니 회원가입을 막거나 예외처리등을 수행하자
+        if(member !=null){
+            throw  new IllegalStateException("이미 가입된 회원입니다.");
+        }
+        //이 내용은 try{}catch(IllegalStateException e) {
+        // model.att("msg",e.get메시지)
+        // return "u/singup";} 처리가능
+    }
+
 
 
 }

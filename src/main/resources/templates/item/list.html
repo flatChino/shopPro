@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>아이템 등록</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <th:block th:if="${not #lists.isEmpty(list)}" th:each="list:${PageResponseDTO.dtoList}">
+
+        <ul>
+            <li th:text="${list.itemName}"></li>
+        </ul>
+
+    </th:block>
+    <th:block th:if="${not #lists.isEmpty(PageResponseDTO.dtoList)}">
+
+        <ul>
+            <li> 값이 없습니다.</li>
+        </ul>
+
+    </th:block>
+
+
+
+</th:block>
+
+</body>
+</html>

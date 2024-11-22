@@ -2,18 +2,22 @@ package com.example.shoppro.entity;
 
 
 import com.example.shoppro.constant.ItemSellStatus;
+import com.example.shoppro.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString(exclude = "itemImgList") //toString(exclude="변수명") 제외할 변수명
 @Table(name="item")
-public class Item {
+public class Item extends BaseEntity {
 
 
     @Id
@@ -37,8 +41,15 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    private LocalDateTime regTime;//상품 등록시간
-    private LocalDateTime updateTime;//상품 수정시간
+   /* @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="item_id")
+    private Member member;
+    */
+
+
+    @OneToMany(mappedBy = "item" ,cascade = CascadeType.REMOVE)//읽기만 가능한 상태
+    private List<ItemImg> itemImgList;
+
 
 
 }

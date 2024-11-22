@@ -5,6 +5,32 @@
     <title>Title</title>
 </head>
 <body>
+<div class="col">
+    <div class="mb-3">
+        <label for="stockNumber" class="form-label">재고 수량</label>
+        <input type="email" class="form-control" id="stockNumber">
+    </div>
+</div>
+<div class="col">
+    <div class="mb-3">
+        <label for="itemDetail" class="form-label">상세설명 </label>
+        <textarea class="form-control" id="itemDetail" rows="3"></textarea>
+    </div>
+</div>
+<div class="col">
+    <div class="mb-3">
+        <label for="itemSellStatus" class="form-label">상품 판매 상태 </label>
+        <input type="email" class="form-control" id="itemSellStatus">
+    </div>
+</div>
+<div class="col">
+    <div class="mb-3">
+        <label for="formFile" class="form-label">이미지등록</label>
+        <input class="form-control" type="file" id="formFile">
+    </div>
+</div>
+
+
 <th:block th:fragment="footer">
   <footer class="footer page-footer font-small cyan darken-3">
       <div class="footer-copyright text-center py-3">
