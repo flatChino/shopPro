@@ -76,4 +76,85 @@ public class ItemImgService {
 
 
     }
+    public void removeimg(long id){
+
+
+        ItemImg itemImg =
+                itemImgRepository.findById(id).get();
+
+
+         fileService.removefile(itemImg.getImgName());
+
+
+        //db에서 지운값
+        itemRepository.deleteById(id);
+
+    }
+
+
+    public void update(Long id, List<MultipartFile>multipartFiles, Long mainino) throws IOException {
+        //이미지 등록은 어디에 무엇을 저장할것인가
+        //이미지는 아이템꺼
+        //아이템 Pk 이미지 파일 이파일을 경로를 잘라서
+        //경로와 함께 이름을 저장한다.
+
+
+        log.info("아이템이미지 서비스로 들어온다 id"+id);
+        if(multipartFiles != null){
+            for(MultipartFile img : multipartFiles){
+                if(!img.isEmpty()){
+                    log.info("아이템 이미지 서비스로 들어온 이미지"+img.getOriginalFilename());
+                    //물리적인 저장
+                    String savedFileName= // uuid가 포함된 물리적인 파일이름
+                            fileService.uploadFile(img);
+
+
+
+
+                    //db저장
+                    Item item=
+                            itemRepository.findById(id).get();
+
+                    String imgUrl ="/images/item/"+ savedFileName;
+
+                    ItemImg itemImg = new ItemImg();
+                    itemImg.setItem(item);
+                    itemImg.setImgName(savedFileName);
+                    itemImg.setImgUrl(imgUrl);
+                    itemImg.setOriImgName(img.getOriginalFilename());
+                    //대표이미지 여부 확인
+
+
+                    if(mainino == null){
+                        if(multipartFiles.indexOf((img))==0) {
+
+                            itemImg=
+                            itemImgRepository.findByItemIdAndRepimgYn(id,"Y");
+                            itemImg.setItem(item);
+                            itemImg.setImgName(savedFileName);
+                            itemImg.setImgUrl(imgUrl);
+                            itemImg.setOriImgName(img.getOriginalFilename());
+
+
+                            //itemImg.setRepimgYn("Y");
+                        }
+                        else {
+                            itemImg.setRepimgYn("N");
+                        }
+
+                    }else {
+                        itemImg.setRepimgYn("N");
+                    }
+
+                    itemImgRepository.save(itemImg);
+
+
+
+
+                }
+            }
+        }
+
+
+    }
 }

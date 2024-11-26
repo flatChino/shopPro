@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,11 +46,15 @@ public class ItemDTO  {
     @NotBlank
     private  String itemDetail;//상품 상세설명
 
-
-
     private ItemSellStatus itemSellStatus;//상품 판매 상태
 
     private List<ItemImgDTO> itemImgDTOList;
+
+    private String CreateBy;
+
+    private LocalDateTime regTime;
+
+    private LocalDateTime updateTime;
 
     public ItemDTO setItemImgDTOList(List<ItemImg>itemImgList){
 
