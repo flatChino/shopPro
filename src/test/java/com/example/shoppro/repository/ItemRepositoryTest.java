@@ -235,6 +235,13 @@ class ItemRepositoryTest {
 
     }
 
+    @Test
+    public void findByIdCreateByTest(){
+        long id= 401L;
+        String email="sinA@a.a";
+
+        log.info(itemRepository.findByIdAndCreateBy(id,email));
+    }
 
 
 

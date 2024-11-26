@@ -22,7 +22,7 @@ public class BaseEntity {
     //만든이
     @Column(updatable = false)
     @CreatedBy
-    private  String CreateBy;
+    private  String createBy;
 
     //수정한이
     @LastModifiedBy

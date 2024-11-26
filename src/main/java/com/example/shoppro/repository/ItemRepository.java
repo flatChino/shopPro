@@ -11,6 +11,9 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item,Long>, ItemsearchRepository {
 
+    public Item findByIdAndCreateBy(long id, String email);
+
+
     public List<Item> findByItemName(String itemName);
 
     @Query("select i from Item i where  i.itemName= :itemName")

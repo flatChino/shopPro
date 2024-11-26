@@ -82,14 +82,14 @@ public class ItemsearchRepositoryImpl extends QuerydslRepositorySupport implemen
 
             }//for문
 
-        }// it문
+        }// if문
         //검색조건까지
         query.where(booleanBuilder); //검색조건완료
         System.out.println(query);
         System.out.println("----------------------------");
 
         query.where(item.id.gt(0L));   // select * from board //   // board.bno > 0
-        query.where(item.CreateBy.matches(email)); // 현재판매자
+        query.where(item.createBy.eq(email)); // 현재판매자
 
         System.out.println(query);
         System.out.println("----------------------------");
